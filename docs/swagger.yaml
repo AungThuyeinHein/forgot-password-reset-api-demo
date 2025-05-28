@@ -1,0 +1,291 @@
+openapi: "3.0.0"
+info:
+  title: Password Reset Demo with Gmail SMTP
+  description: This Documentation is to demostrate a authentication, authorization and password resetting by sending the password reset url with SMTP services.
+  version: "1.0.0"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /api/v1/user/login:
+   post:
+      summary: "User login"
+      description: "Endpoint for user login. Returns a JWT token upon successful authentication."
+      tags:
+        - User Managment Feature
+      requestBody:
+        required: true
+        content:   
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: "The user's email"
+                  example: username@gmail.com
+                password:
+                  type: string
+                  format: password
+                  description: "The user's password"
+                  example: 12345
+      responses:
+        200:
+          description: "Login successful"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: "User successfully log in."
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                            example: 66a92c7bfb3256a5e5a4be99
+                          username:
+                            type: string
+                            format: email
+                            example: username@gmail.com
+                          role:
+                            type: string
+                            example: user
+                      token:
+                        type: string
+                        description: "JWT token for authenticated requests"
+                        example: "token"
+
+        400:
+          description: "Incorrect email or password"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: "Please provide your account password"
+  /api/v1/auth/signup:
+    post:
+      summary: "Sign up a new user"
+      description: "Creates a new user account. Required fields: email, password, confirmPassword."
+      tags:
+        - User Management Feature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - confirmPassword
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: "Unique email for the user."
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  format: password
+                  description: "The user's password."
+                  example: password123
+                confirmPassword:
+                  type: string
+                  format: password
+                  description: "Must match the password."
+                  example: password123
+      responses:
+        201:
+          description: "User created successfully. Returns a JWT token."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 201
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: "User created successfully."
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        description: "JWT token for authenticated requests."
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        400:
+          description: "Validation error (missing/invalid fields, email taken, password mismatch, etc.)"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: "The email is already in use. Please use a different email."
+
+  /api/v1/auth/forgot-password:
+    post:
+      summary: "Request password reset"
+      description: "Sends a password reset link to the user's email. The link is valid for 10 minutes."
+      tags:
+        - Password Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: "The email address of the user who wants to reset their password"
+                  example: user@example.com
+      responses:
+        200:
+          description: "Password reset email sent successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Password reset link has been sent to the user email: user@example.com"
+        404:
+          description: "User not found with the provided email"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  status:
+                    type: string
+                    example: "fail"
+                  message:
+                    type: string
+                    example: "We could not find the user with given email on our server."
+
+  /api/v1/auth/reset-password/{token}:
+    patch:
+      summary: "Reset user password"
+      description: "Resets the user's password using the token received via email."
+      tags:
+        - Password Management
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+          description: "The reset token received via email"
+          example: "d4f5e6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+                - confirmPassword
+              properties:
+                password:
+                  type: string
+                  format: password
+                  description: "New password"
+                  example: newSecurePassword123
+                confirmPassword:
+                  type: string
+                  format: password
+                  description: "Must match the new password"
+                  example: newSecurePassword123
+      responses:
+        200:
+          description: "Password reset successful"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Password successfully reset for your account: user@example.com"
+                  token:
+                    type: string
+                    description: "New JWT token for the user"
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        400:
+          description: "Invalid or expired token, or password validation failed"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  status:
+                    type: string
+                    example: "fail"
+                  message:
+                    type: string
+                    example: "Token is invalid or has expired"

@@ -1,0 +1,43 @@
+{
+  "name": "forgot-password-reset-api-demo",
+  "version": "1.0.0",
+  "description": "This Repository demostrate a authentication, authorization and password resetting by sending the password reset url with SMTP services.",
+  "keywords": [
+    "passoward",
+    "reset",
+    "SMTP"
+  ],
+  "homepage": "https://github.com/AungThuyeinHein/forgot-password-reset-api-demo#readme",
+  "bugs": {
+    "url": "https://github.com/AungThuyeinHein/forgot-password-reset-api-demo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AungThuyeinHein/forgot-password-reset-api-demo.git"
+  },
+  "license": "MIT",
+  "author": "B@C",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "export NODE_ENV=development && nodemon server.js",
+    "prod": "export NODE_ENV=production && node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.3",
+    "swagger-ui-express": "^5.0.1",
+    "validator": "^13.15.0",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
