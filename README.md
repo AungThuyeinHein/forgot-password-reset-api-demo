@@ -30,9 +30,17 @@ If you run in local
 
 http://localhost:8000/api-docs
 
-If you run in production
+If you want to test api you can try it out in below swagger API documentation.
 
 https://forgot-password-reset-api-demo.onrender.com/api-docs
+
+## Contact Info
+
+- **Contact Number:** +959451315280
+
+- **Mail Address:** aungthuyeinhein98@gmail.com
+
+- **Portfolio:** https://aungthuyeinhein.vercel.app/
 
 ## Installation Guide
 
@@ -82,6 +90,13 @@ NPM version (11.1.0)
     # Backend API URL
     BACKEND_API_URL= "Your backend API URL"
 
+    OR
+
+    #Frontend URL
+    You Can change and setup as you like. Token is the important factor.
+    FRONTEND_API_URL = "Your frontend API URL"
+
+
     # Login Expiry Time
     LOGIN_EXPIRES= "Login expiry time in milliseconds"
     ```
@@ -103,12 +118,15 @@ NPM version (11.1.0)
     npm run prod
     ```
 
-5.  **Explore the API endpoints:**
-    - Refer to the project's API documentation (e.g., a `README.md` section or a dedicated documentation file) for details on available endpoints, request methods (POST, GET, etc.), request bodies, and expected responses. Common endpoints include:
-      - `/signup` (POST)
-      - `/login` (POST)
-      - `/forgot-password` (POST)
-      - `/reset-password` (PATCH)
+    OR
+
+        ```bash
+
+    npm run dev
+
+    ```
+
+    ```
 
 ## API Endpoints (Example)
 
